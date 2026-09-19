@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="cart-wrap">
+  <h1 class="page-title">🛒 Корзина</h1>
+  {% if items %}
+    <div class="cart-list">
+    {% for item in items %}
+      <div class="cart-item">
+        <div class="cart-emoji">{{ item.model.emoji }}</div>
+        <div class="cart-info">
+          <h3>{{ item.model.title }}</h3>
+          <span class="cart-cat">{{ item.model.category }}</span>
+        </div>
+        <div class="cart-qty">× {{ item.qty }}</div>
+        <div class="cart-price">{{ item.subtotal }} ₽</div>
+        <form method="POST" action="{{ url_for('remove_from_cart', model_id=item.model.id) }}">
+          <button type="submit" class="btn-remove">✕</button>
+        </form>
+      </div>
+    {% endfor %}
+    </div>
+    <div class="cart-total">
+      <div><span>Итого:</span><strong>{{ total }} ₽</strong></div>
+      <form method="POST" action="{{ url_for('checkout') }}">
+        <button type="submit" class="btn-primary btn-lg">Оформить заказ 🚀</button>
+      </form>
+    </div>
+  {% else %}
+    <div class="empty-state"><p>🛸 Корзина пуста</p><a href="{{ url_for('index') }}" class="btn-primary">В каталог</a></div>
+  {% endif %}
+</section>
+{% endblock %}

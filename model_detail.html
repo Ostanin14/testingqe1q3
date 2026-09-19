@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="detail-wrap">
+  <a href="{{ url_for('index') }}" class="back-link">← Назад в каталог</a>
+  <div class="detail-card">
+    <div class="detail-preview"><span class="detail-emoji">{{ model.emoji }}</span></div>
+    <div class="detail-info">
+      <span class="card-badge">{{ model.category }}</span>
+      <h1>{{ model.title }}</h1>
+      <p class="detail-desc">{{ model.description }}</p>
+      <ul class="detail-specs">
+        <li><strong>Полигоны:</strong> {{ model.polygon }}</li>
+        <li><strong>Формат:</strong> {{ model.format }}</li>
+        <li><strong>Лицензия:</strong> Коммерческая</li>
+        <li><strong>Доставка:</strong> Мгновенно через Telegram</li>
+      </ul>
+      <div class="detail-buy">
+        <span class="price-lg">{{ model.price }} ₽</span>
+        <button class="add-to-cart-btn btn-primary btn-lg" data-id="{{ model.id }}">🛒 В корзину</button>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="auth-wrap">
+  <div class="auth-card">
+    <h1>Создать аккаунт</h1>
+    <p class="auth-sub">После регистрации аккаунт должен одобрить администратор</p>
+    <form method="POST">
+      <label>Имя пользователя</label>
+      <input type="text" name="username" required minlength="3" placeholder="neo_3d">
+      <label>Email</label>
+      <input type="email" name="email" required placeholder="you@mail.com">
+      <label>Пароль (минимум 6 символов)</label>
+      <input type="password" name="password" required minlength="6" placeholder="••••••••">
+      <button type="submit" class="btn-primary btn-lg">Зарегистрироваться</button>
+    </form>
+    <p class="auth-switch">Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a></p>
+  </div>
+</section>
+{% endblock %}

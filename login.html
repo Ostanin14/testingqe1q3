@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="auth-wrap">
+  <div class="auth-card">
+    <h1>Вход в систему</h1>
+    <p class="auth-sub">С возвращением, творец</p>
+    <form method="POST">
+      <label>Имя пользователя</label>
+      <input type="text" name="username" required placeholder="neo_3d">
+      <label>Пароль</label>
+      <input type="password" name="password" required placeholder="••••••••">
+      <button type="submit" class="btn-primary btn-lg">Войти</button>
+    </form>
+    <p class="auth-switch">Нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрироваться</a></p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="admin-wrap">
+  <h1 class="page-title">👑 Админ-панель</h1>
+
+  <div class="stats-grid">
+    <div class="stat-card pending"><div class="stat-num">{{ stats.pending }}</div><div class="stat-label">Ожидают</div></div>
+    <div class="stat-card users"><div class="stat-num">{{ stats.users }}</div><div class="stat-label">Пользователей</div></div>
+    <div class="stat-card orders"><div class="stat-num">{{ stats.orders }}</div><div class="stat-label">Заказов</div></div>
+    <div class="stat-card models"><div class="stat-num">{{ stats.models }}</div><div class="stat-label">Моделей</div></div>
+  </div>
+
+  <h2 class="admin-section-title">⏳ Заявки на регистрацию</h2>
+  {% if pending_users %}
+    <div class="admin-table">
+      <div class="admin-row header"><div>ID</div><div>Имя</div><div>Email</div><div>Дата</div><div>Действия</div></div>
+      {% for u in pending_users %}
+      <div class="admin-row">
+        <div>#{{ u.id }}</div>
+        <div><b>{{ u.username }}</b></div>
+        <div class="muted">{{ u.email }}</div>
+        <div class="muted">{{ u.created_at.strftime('%d.%m.%Y') }}</div>
+        <div class="admin-actions">
+          <form method="POST" action="{{ url_for('approve_user', user_id=u.id) }}" style="display:inline">
+            <button class="btn-approve">✓ Одобрить</button>
+          </form>
+          <form method="POST" action="{{ url_for('reject_user', user_id=u.id) }}" style="display:inline">
+            <button class="btn-reject">✕ Отклонить</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="muted-block">Нет новых заявок 👍</p>
+  {% endif %}
+
+  <h2 class="admin-section-title">🛒 Заказы</h2>
+  {% if orders %}
+    <div class="admin-table">
+      <div class="admin-row header"><div>#</div><div>Клиент</div><div>Состав</div><div>Сумма</div><div>Статус</div></div>
+      {% for o in orders %}
+      <div class="admin-row">
+        <div>#{{ o.id }}</div>
+        <div><b>{{ o.username }}</b><br><span class="muted">{{ o.email }}</span></div>
+        <div class="order-items-cell">{{ o.items_summary }}</div>
+        <div class="price-cell">{{ o.total }} ₽</div>
+        <div>
+          {% if o.status == 'new' %}<span class="status status-new">Новый</span>
+          {% elif o.status == 'in_progress' %}<span class="status status-progress">В работе</span>
+          {% else %}<span class="status status-done">Готов</span>{% endif %}
+          <form method="POST" action="{{ url_for('update_order_status', order_id=o.id, status='done') }}" style="display:inline">
+            <button class="btn-approve btn-mini">Готово</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="muted-block">Заказов нет</p>
+  {% endif %}
+
+  <h2 class="admin-section-title">👥 Все пользователи</h2>
+  <div class="admin-table">
+    <div class="admin-row header"><div>ID</div><div>Имя</div><div>Email</div><div>Статус</div><div>Действия</div></div>
+    {% for u in all_users %}
+    <div class="admin-row">
+      <div>#{{ u.id }}</div>
+      <div><b>{{ u.username }}</b></div>
+      <div class="muted">{{ u.email }}</div>
+      <div>{% if u.is_approved %}<span class="status status-done">Активен</span>{% else %}<span class="status status-new">Ожидает</span>{% endif %}</div>
+      <div>
+        <form method="POST" action="{{ url_for('reject_user', user_id=u.id) }}" style="display:inline"
+              onsubmit="return confirm('Удалить пользователя?');">
+          <button class="btn-reject btn-mini">🗑 Удалить</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="admin-tg-box">
+    <h3>💬 Telegram менеджера</h3>
+    <a href="https://t.me/{{ manager[1:] }}" target="_blank" class="btn-telegram">✈️ {{ manager }}</a>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="order-success-wrap">
+  <div class="order-success-card">
+    <div class="success-icon">✅</div>
+    <h1>Заказ #{{ order.id }} принят!</h1>
+    <p class="order-sub">Спасибо за покупку, {{ order.username }}!</p>
+
+    <div class="order-summary">
+      <h3>📦 Состав заказа:</h3>
+      {% for item in items %}<p class="order-item-line">{{ item }}</p>{% endfor %}
+      <p class="order-total">Итого: <strong>{{ total }} ₽</strong></p>
+    </div>
+
+    <div class="manager-box">
+      <div class="manager-glow"></div>
+      <h2>📩 Свяжитесь с менеджером</h2>
+      <p>Чтобы получить ваши 3D модели, напишите менеджеру в Telegram:</p>
+      <a href="https://t.me/{{ manager[1:] }}" target="_blank" class="btn-telegram">✈️ {{ manager }}</a>
+      <p class="manager-hint">Укажите номер заказа <b>#{{ order.id }}</b> и email <b>{{ order.email }}</b></p>
+    </div>
+
+    <a href="{{ url_for('index') }}" class="btn-outline btn-lg">← Вернуться в каталог</a>
+  </div>
+</section>
+{% endblock %}

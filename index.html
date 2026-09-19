@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+  <h1 class="hero-title"><span class="gradient-text">LAYERTECH</span> 3D</h1>
+  <p class="hero-subtitle">Премиальные 3D модели для игр, кино и рендеров.</p>
+  <form method="GET" class="search-box">
+    <input type="text" name="search" placeholder="🔍 Найти модель..." value="{{ search }}">
+    {% if current_category %}<input type="hidden" name="category" value="{{ current_category }}">{% endif %}
+    <button type="submit">Искать</button>
+  </form>
+</section>
+
+<section class="categories">
+  <a href="{{ url_for('index') }}" class="cat-chip {% if not current_category %}active{% endif %}">Все</a>
+  {% for cat in categories %}
+    <a href="{{ url_for('index', category=cat) }}" class="cat-chip {% if current_category == cat %}active{% endif %}">{{ cat }}</a>
+  {% endfor %}
+</section>
+
+<section class="products">
+{% if models %}
+  <div class="product-grid">
+  {% for model in models %}
+    <div class="product-card" style="animation-delay: {{ loop.index0 * 0.06 }}s">
+      <a href="{{ url_for('model_detail', model_id=model.id) }}" class="card-link">
+        <div class="card-preview">
+          <span class="card-emoji">{{ model.emoji }}</span>
+          <span class="card-badge">{{ model.category }}</span>
+        </div>
+        <div class="card-body">
+          <h3>{{ model.title }}</h3>
+          <p>{{ model.description[:80] }}...</p>
+          <div class="card-meta"><span>◆ {{ model.polygon }}</span><span>◆ {{ model.format }}</span></div>
+        </div>
+      </a>
+      <div class="card-footer">
+        <span class="price">{{ model.price }} ₽</span>
+        <button class="add-to-cart-btn btn-primary" data-id="{{ model.id }}">+ В корзину</button>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+{% else %}
+  <div class="empty-state"><p>😔 Ничего не найдено</p><a href="{{ url_for('index') }}" class="btn-primary">Сбросить</a></div>
+{% endif %}
+</section>
+{% endblock %}
